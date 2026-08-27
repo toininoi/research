@@ -8,14 +8,14 @@ A CNI (Container Network Interface, the component that wires pods into the
 network) is something you pick once when you build a cluster and rarely look at
 again. As a result, it is hard to find any organized data on how much CPU and
 memory CNI agents and controllers consume day to day. Throughput benchmarks are
-everywhere, but we could not find a public source that compares standing cost
+everywhere, but I could not find a public source that compares standing cost
 under identical conditions, and vendor docs do not state it either: Cilium
 ships its helm chart without resource requests, and a Calico maintainer
 declined a request to publish recommended values. Search results for these
 numbers are often filled by sources with no traceable origin.
 
 This repository is the result of measuring that standing cost with one
-procedure and one toolset. We split Calico Open Source, Cilium, Flannel,
+procedure and one toolset. I split Calico Open Source, Cilium, Flannel,
 Antrea, and kube-router into 14 conditions and collected CPU, memory, and eBPF
 map kernel memory (the kernel-side storage that eBPF programs use for state)
 across 6 phases, from a quiet idle to pod churn (pods being deleted and
@@ -98,7 +98,7 @@ Versions are pinned: Calico 3.32, Cilium 1.19, Flannel 0.28.7, Antrea 2.6.2,
 kube-router 2.10.0, Kubernetes 1.36.2. kube-proxy runs in iptables mode in
 every condition except Fl1n. nftables mode went GA in 1.33, but iptables is
 still the default in 1.36, so the default that most clusters actually run is
-what we used as the baseline.
+what I used as the baseline.
 
 Phases run in order: idle (1~2h), pod density ramp (0 to 60), 100
 NetworkPolicies, 200 Services, churn (delete 10 pods every 20 seconds), node
@@ -109,12 +109,12 @@ nothing from the previous condition survives.
 
 - 3 nodes (1 control plane, 2 workers), 2 CPUs and 4GB each, Ubuntu 24.04
   arm64, kernel 6.8, VirtualBox, hosted on a single Apple Silicon laptop.
-- Because this is a virtualized environment, we did not measure throughput or
+- Because this is a virtualized environment, I did not measure throughput or
   latency: the virtual switch would blend into the numbers and they could not
   be attributed to the CNI itself. Traffic and object load are used only as
   stimuli that trigger resource consumption.
 - Collection uses kubelet cadvisor metrics (via the API-server proxy, 15s
-  interval) and per-node bpftool (eBPF map memlock). We installed no
+  interval) and per-node bpftool (eBPF map memlock). I installed no
   collection components into the cluster under test, since those would
   themselves become measurement noise.
 
@@ -232,18 +232,18 @@ as-is with kube-proxy removed. Ku1 is the lightest of all conditions at idle
 (about 1.1 cores per node) and stays at 3,158mC through the following phase.
 All 5 repetitions produced the same numbers.
 
-We reproduced it once separately to narrow the cause. There were no pod
+I reproduced it once separately to narrow the cause. There were no pod
 restarts, no OOM kills, no error logs, no netlink storm, and no lingering IPVS
 drain entries; the CPU was consumed by a userspace loop in the kube-router
 process. The most telling observation is history dependence: before churn, the
 same object scale (200 Services, 12,008 endpoints) cost 77mC, but after one
 churn episode the same scale holds at 3,300mC, and deleting the load objects
-returns it to idle within 90 seconds. Our reading is that churn pushes the
+returns it to idle within 90 seconds. My reading is that churn pushes the
 sync loop into continuous re-execution, and since one sync pass costs in
 proportion to Services times endpoints, CPU cannot come down while that scale
 persists. Ku2, which leaves the service proxy to kube-proxy, was normal under
 the same load (churn 406mC, then 25mC), so the cause most likely lies in
-kube-router's IPVS service proxy; we did not identify which internal operation
+kube-router's IPVS service proxy; I did not identify which internal operation
 is responsible. Pinning that down would need profiling enabled, and is a
 follow-up investigation if needed.
 
@@ -273,7 +273,7 @@ Pods connect to the host through a virtual device. Using netkit, the kernel
 6.7 device built to replace the veth standard, lets packets skip the host-side
 detour; Cilium supports it from 1.16 as a performance improvement. Comparing
 Ci3 (veth) and Ci4 (netkit), every phase is within noise. netkit changes the
-path packets take, so we expected it not to show up on the standing-cost axis,
+path packets take, so I expected it not to show up on the standing-cost axis,
 and it did not. From a standing-cost perspective there is no reason to hold
 back on netkit.
 

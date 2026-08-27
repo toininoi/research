@@ -10,14 +10,14 @@ The MCP 2026-07-28 revision is the protocol's largest change since launch:
 protocol-level sessions and the `Mcp-Session-Id` header are gone, every request
 carries what it needs, and anything that used to live in a session now travels
 as an explicit handle in ordinary tool arguments. Plenty of writeups explain
-what changed. What we could not find is a measurement: how much does this
+what changed. What I could not find is a measurement: how much does this
 actually matter when the server runs on Kubernetes, behind a load balancer,
 with replicas scaling and pods being replaced?
 
-So we measured it. The same workload runs twice: once on an old-spec
+So I measured it. The same workload runs twice: once on an old-spec
 (2025-11-25) session-based server, once ported to the new stateless spec, on
 the same cluster, driven by the same load generator, on the release-week
-stable SDK. After the main run we widened the sample, so the scale-out cells
+stable SDK. After the main run I widened the sample, so the scale-out cells
 below carry 10 to 22 observations each. This repository holds the harness,
 the ported server, and the numbers.
 
@@ -49,7 +49,7 @@ new spec when a handle points at state the receiving pod does not have.
   but pins all traffic from one client IP to one pod; a gateway (agentgateway
   v1.4.1) absorbs both scale-out and pod replacement, at the price of moving
   the session-keeping burden into the gateway itself.
-- The blocker we hit in the pilot is fixed: agentgateway v1.4.0-alpha.1
+- The blocker I hit in the pilot is fixed: agentgateway v1.4.0-alpha.1
   corrupted `params._meta`, breaking new-spec passthrough; v1.4.1 passes it
   intact.
 
@@ -57,7 +57,7 @@ new spec when a handle points at state the receiving pod does not have.
 
 | Situation | What the numbers say |
 |---|---|
-| You scale out, autoscale, or deploy often | Migrate. The old spec loses sessions on every replica change and every pod replacement, and its throughput varies run to run. The new spec held the offered rate in every condition we measured |
+| You scale out, autoscale, or deploy often | Migrate. The old spec loses sessions on every replica change and every pod replacement, and its throughput varies run to run. The new spec held the offered rate in every condition I measured |
 | You are porting now | The handle design is the decision that matters. Keep state out of pod memory: sign it into the handle (HMAC) or put it in external storage. Both ran clean through scale-out and pod replacement; pod memory lost requests in both |
 | You cannot migrate yet | Sticky sessions and gateway session routing both work, with different costs. Session affinity gives up load balancing; a gateway moves the session-keeping burden into the gateway layer |
 | You run clients | Nothing to do per-request: the new dialect is headers plus `_meta`, and the release-week SDKs fill the new required fields (`resultType`, `serverInfo`) automatically |
@@ -88,7 +88,7 @@ agentgateway. Paths (a) and (c) were measured.
 - **Path (c) gateway**: the same workload through agentgateway v1.4.1, old
   spec with `sessionRouting: Stateful`, new spec with `Stateless`.
 
-After the main run (2026-08-06) we continued with follow-up measurement: M1
+After the main run (2026-08-06) I continued with follow-up measurement: M1
 repetitions raised to 10 to 22 per cell, old-spec pod replacement extended to
 six runs (three for the new spec), plus session affinity, kube-proxy nftables
 mode, client concurrency 4 to 32 (old spec), a 30-minute continuous run, pod
@@ -153,7 +153,7 @@ spec, not measurement noise.
   (324.6 achieved), still with zero losses. So the offered rate is about two
   thirds of what this cluster can serve, and what transfers is the shape:
   which configurations lose requests and which hold the offered rate.
-- **Back-to-back connection-heavy cells need a cooldown.** Our first full run
+- **Back-to-back connection-heavy cells need a cooldown.** My first full run
   was invalidated by this: firing 200 new connections per second in
   consecutive cells piles up conntrack TIME_WAIT state (120s timeout) on the
   path, and later cells see p99 jump from 16ms to over 1s with throughput
@@ -163,7 +163,7 @@ spec, not measurement noise.
   lost session comes back as HTTP 400; through the gateway it comes back as a
   5xx. A client that only counts 400/404 will report the gateway as
   loss-free, and a client that does not re-initialize on 5xx will fail for
-  the rest of the run and make the gateway look far worse than it is. Our
+  the rest of the run and make the gateway look far worse than it is. My
   harness started as the latter; that run was discarded and remeasured after
   teaching it to re-initialize on 5xx as well.
 - **Gateway cells are not comparable to direct-path cells in absolute
@@ -208,14 +208,14 @@ no session for a request to miss, so any pod can serve any request. This is
 the entire architectural argument for the stateless revision, visible in one
 row of numbers.
 
-The result held as we changed the conditions: kube-proxy switched to nftables
+The result held as I changed the conditions: kube-proxy switched to nftables
 mode and a 30-minute continuous run both produced zero server-side losses. The nftables comparison also confirms that
 the old spec's session loss comes from per-connection balancing itself, not
 from the dataplane implementation.
 
 ### 3. Pod replacement is only an event on the old spec
 
-We killed a pod during a 60-second run six times against the old spec and
+I killed a pod during a 60-second run six times against the old spec and
 three times against the new. The old spec lost 1,922 requests to session
 loss, ranging from 59 to 1,072 per run depending on how many sessions the
 killed pod happened to hold. The new spec went through its three kills
@@ -226,7 +226,7 @@ The same test applied to the handle designs: the pod-memory variant lost
 13,942 handles across five kills, because a dying pod takes all of its state
 with it, while HMAC and Redis lost none. The same
   rule Kubernetes workloads already follow, keeping session state in an
-  external store, applies to handles as well. We also killed Redis itself mid-run:
+  external store, applies to handles as well. I also killed Redis itself mid-run:
 91.7 rps achieved with 24 losses, small because the pod restarts quickly, but
 a reminder that external storage is a dependency you now have to keep alive.
 
@@ -243,12 +243,12 @@ does not make a stateless application; that part of the migration is yours.
 ### 5. Both bridges for the old spec work, at different costs
 
 If you have to run an old-spec server at multiple replicas before migrating,
-there are two options, and both removed the losses in our runs.
+there are two options, and both removed the losses in my runs.
 
 One is the Service's sticky sessions. With `sessionAffinity: ClientIP`, four
 replicas served 200.0 rps with zero losses (26.4 rps median and 13,760 losses
 without it), and pod-replacement losses fell from 2,148 to 88. One caveat:
-our load generator is a single host, so a single client IP, and ClientIP
+my load generator is a single host, so a single client IP, and ClientIP
 affinity pins per IP; all traffic went to one pod. Perfect session survival
 was bought with zero load balancing. Real fleets have many client IPs, so the
 effect will be partial.
@@ -265,7 +265,7 @@ recover from 5xx would fare much worse.
 Either way, the burden of keeping session state does not disappear; it moves.
 Sticky sessions trade it against load balancing; a gateway carries it into
 the gateway layer, which makes the gateway's own failure and replacement the
-next thing to think about. We did not kill the gateway in this study. The new
+next thing to think about. I did not kill the gateway in this study. The new
 spec posts the same numbers with neither device.
 
 ### 6. The ecosystem caught up during the release window
@@ -273,7 +273,7 @@ spec posts the same numbers with neither device.
 In the July pilot, agentgateway v1.4.0-alpha.1 mangled `params._meta`, so
 new-spec traffic could not pass through it end to end. v1.4.1 (released right
 after the spec) passes it intact, and both SDKs shipped stable 2.0.0.
-Against the release-final spec we also confirmed the changes that could have
+Against the release-final spec I also confirmed the changes that could have
 affected this harness (error-code renumbering, required `resultType`,
 `ttlMs`/`cacheScope` on list results) are all filled by the SDK; a server
 ported on the beta SDK ran unmodified on stable.
@@ -312,6 +312,6 @@ build and load images, then deploy (the snapshot restore would wipe images
 loaded before it). The image build also needs a running Docker daemon; on
 machines where the daemon is started by hand (colima and the like) the build
 script now checks first, tries to start it, and stops with a clear error
-otherwise. We lost an unattended run to that assumption before adding the
+otherwise. I lost an unattended run to that assumption before adding the
 check. Aggregated tables are in this README; per-cell JSON stays out of git
 and is available on request.

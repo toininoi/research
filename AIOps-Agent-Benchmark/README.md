@@ -30,7 +30,7 @@ This is not a general coding benchmark; it is scoped to the **AIOps / SRE** cont
 
 ## Open-Source Preview (early)
 
-We are extending this benchmark to self-hosted open-source models that fit a single-workstation envelope (one 80 to 96GB GPU, or a 128GB workstation), covering open-source families such as Gemma, Llama, and Qwen, among others. The same ten scenarios and the same Ops_Score apply, so open models can be measured against the commercial baseline above.
+I am extending this benchmark to self-hosted open-source models that fit a single-workstation envelope (one 80 to 96GB GPU, or a 128GB workstation), covering open-source families such as Gemma, Llama, and Qwen, among others. The same ten scenarios and the same Ops_Score apply, so open models can be measured against the commercial baseline above.
 
 Early prototyping with an open model in the Gemma 4 class already shows the shape of the gap:
 
