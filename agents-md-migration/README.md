@@ -17,6 +17,7 @@ That question is where this study started.
 - **All three delivery methods load.** A canary check confirmed Claude Code follows both the `@AGENTS.md` import and the symlink (a no-context control did not respond to the canary).
 - **No systematic slowdown.** Across 5 model configurations (Haiku 4.5, Sonnet 4.6, Sonnet 5, Opus 4.8, Fable 5), wall-time deltas flip sign between conditions and do not track token deltas, which is the signature of LLM run-to-run variance, not context-loading overhead.
 - **No token-cost penalty.** Cache-write token deltas between conditions stay within ±6% and move together with the symlink condition, which is mechanically identical to native and therefore acts as a built-in control. On four models the import measured 3 to 4% lower than native; on Sonnet 5 both the import and the symlink measured 6% higher, which marks that delta as run-to-run noise rather than a delivery cost.
+- **Reproduced on a native AGENTS.md reader.** On OpenCode with two local models (gemma4:12b, qwen3.8:27b, 80 runs), the fallback path (CLAUDE.md) and the native path (AGENTS.md) showed no speed or task-outcome difference either. See the [extension section](#extension-a-native-agentsmd-reader-opencode).
 
 ## Conditions
 
@@ -66,6 +67,43 @@ Deltas are large but unsystematic: the sign flips between models and conditions,
 
 Output tokens and tool-call counts are also flat (within ±15% and ±8%, mixed signs).
 
+## Extension: a native AGENTS.md reader (OpenCode)
+
+The main study measures Claude Code, which has no native AGENTS.md support.
+The obvious follow-up question is whether the same holds on an agent that
+reads AGENTS.md natively and treats CLAUDE.md as a fallback. OpenCode does
+exactly that, so the delivery method can be varied at the agent's own file
+resolution layer instead of through an import line.
+
+Two conditions, each with the payload byte-identical: **CO** puts only
+CLAUDE.md in the working directory (the fallback path), **AO** puts only
+AGENTS.md (the native path). Two local models through Ollama (gemma4:12b,
+qwen3.8:27b), the same four low-variance scenarios, 5 repetitions,
+conditions alternating within each repetition: 80 runs, all rc=0.
+
+**No difference, again.** Pairing each repetition's CO and AO run directly
+(20 pairs per model), AO was slower in 7 of 20 pairs on one model and 12 of
+20 on the other; the mean pair difference is a few percent of its own
+standard deviation, and run-to-run spread within one condition dwarfs it.
+Task outcomes agree: 13 versus 15 solved runs (CO/AO, gemma4:12b) and 15
+versus 18 (qwen3.8:27b), a gap inside run-to-run variance at this sample
+size.
+
+Two behaviors of the resolution order came out of the load check, verified
+on both models: the CLAUDE.md fallback does load when AGENTS.md is absent,
+and when both files are present AGENTS.md wins.
+
+One methodological trap is worth passing on. A load canary that only asks
+"what is the codeword" is not enough, because a model can find the file with
+a grep tool and answer correctly without the file ever entering its context.
+The probe has to require the right codeword **with zero tool calls**; an
+earlier pass that omitted this check produced an invalid campaign and was
+re-run.
+
+Per-scenario tables, the scoring rule, the invalidation record, and the
+runner scripts are in
+[studies/opencode-native](studies/opencode-native/RESULTS.md).
+
 ## Method
 
 - **Tasks**: Kubernetes incident-response scenarios from the AIOps Agent Benchmark (broken deployment, wrong service selector, OOM limit, failing readiness probe). Each run: restore cluster snapshot, inject the fault, run the agent with `--dangerously-skip-permissions`, cold start.
@@ -114,6 +152,7 @@ Per-run raw data (`runs/`) and the measured payload (a working project `CLAUDE.m
 
 - Accuracy and safety scoring (Ops_Score, deterministic audit-based unsafe-action count) were not part of this pass; the study answers the speed and token-cost question. The audit slices are captured per run, so that scoring can be added later.
 - The model sweep covers the 4 low-variance scenarios; the harder scenarios (multi-step root-cause chains) ran once per condition and are dominated by trajectory variance, which is exactly why the sweep was scoped to the low-variance set.
+- In the OpenCode extension, task outcomes were scored heuristically (did a correct fix land, did a health check follow) rather than with the deterministic audit-based scorer, and the two models are local ones; the finding is "no difference detected at this sample size", not a proof of equivalence.
 
 ## Prior work
 

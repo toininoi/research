@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" font-family="Helvetica, Arial, sans-serif">
+<rect width="920" height="470" fill="white"/>
+<text x="460.0" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">What each addition costs in latency (difference of median p50, n=5 each)</text>
+<text x="460.0" y="50" font-size="11" fill="#777" text-anchor="middle">Each row = a same-day controlled pair. Dots = measured p50, right = difference of medians (tables report mean pair increments). Compare absolutes within a row only (days differ). p99 in the tables.</text>
+<text x="226.0" y="84" font-size="12.5" fill="#111" text-anchor="middle" font-weight="bold">Q1. Adding the gateway hop?</text>
+<text x="226.0" y="100" font-size="10.5" fill="#666" text-anchor="middle">direct call vs through the gateway</text>
+<circle cx="66" cy="122" r="5" fill="#8a8f98"/>
+<text x="76" y="126" font-size="10.5" fill="#333">direct</text>
+<circle cx="236" cy="122" r="5" fill="#2e6f9e"/>
+<text x="246" y="126" font-size="10.5" fill="#333">via gateway</text>
+<line x1="122.0" y1="144" x2="122.0" y2="364" stroke="#eee"/>
+<text x="122.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">0</text>
+<line x1="182.0" y1="144" x2="182.0" y2="364" stroke="#eee"/>
+<text x="182.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">2</text>
+<line x1="242.0" y1="144" x2="242.0" y2="364" stroke="#eee"/>
+<text x="242.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">4</text>
+<line x1="302.0" y1="144" x2="302.0" y2="364" stroke="#eee"/>
+<text x="302.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">6</text>
+<line x1="362.0" y1="144" x2="362.0" y2="364" stroke="#eee"/>
+<text x="362.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">8</text>
+<text x="242.0" y="394" font-size="10" fill="#777" text-anchor="middle">p50 (ms)</text>
+<text x="26" y="154" font-size="11" fill="#333">new conn per call</text>
+<text x="26" y="168" font-size="10" fill="#888">100 rps</text>
+<line x1="320.0" y1="152" x2="335.0" y2="152" stroke="#2e6f9e" stroke-width="4" opacity="0.45"/>
+<circle cx="320.0" cy="152" r="5.5" fill="#8a8f98"/>
+<circle cx="335.0" cy="152" r="5.5" fill="#2e6f9e"/>
+<text x="320.0" y="173" font-size="9.5" fill="#777" text-anchor="middle">6.6</text>
+<text x="335.0" y="141" font-size="9.5" fill="#2e6f9e" text-anchor="middle" font-weight="bold">7.1</text>
+<text x="418" y="157" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+0.5ms</text>
+<text x="26" y="212" font-size="11" fill="#333">new conn per call</text>
+<text x="26" y="226" font-size="10" fill="#888">200 rps</text>
+<line x1="281.0" y1="210" x2="305.0" y2="210" stroke="#2e6f9e" stroke-width="4" opacity="0.45"/>
+<circle cx="281.0" cy="210" r="5.5" fill="#8a8f98"/>
+<circle cx="305.0" cy="210" r="5.5" fill="#2e6f9e"/>
+<text x="281.0" y="231" font-size="9.5" fill="#777" text-anchor="middle">5.3</text>
+<text x="305.0" y="199" font-size="9.5" fill="#2e6f9e" text-anchor="middle" font-weight="bold">6.1</text>
+<text x="418" y="215" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+0.8ms</text>
+<text x="26" y="270" font-size="11" fill="#333">connection reuse</text>
+<text x="26" y="284" font-size="10" fill="#888">100 rps</text>
+<line x1="230.0" y1="268" x2="278.0" y2="268" stroke="#2e6f9e" stroke-width="4" opacity="0.45"/>
+<circle cx="230.0" cy="268" r="5.5" fill="#8a8f98"/>
+<circle cx="278.0" cy="268" r="5.5" fill="#2e6f9e"/>
+<text x="230.0" y="289" font-size="9.5" fill="#777" text-anchor="middle">3.6</text>
+<text x="278.0" y="257" font-size="9.5" fill="#2e6f9e" text-anchor="middle" font-weight="bold">5.2</text>
+<text x="418" y="273" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+1.6ms</text>
+<text x="26" y="328" font-size="11" fill="#333">connection reuse</text>
+<text x="26" y="342" font-size="10" fill="#888">200 rps</text>
+<line x1="212.0" y1="326" x2="248.0" y2="326" stroke="#2e6f9e" stroke-width="4" opacity="0.45"/>
+<circle cx="212.0" cy="326" r="5.5" fill="#8a8f98"/>
+<circle cx="248.0" cy="326" r="5.5" fill="#2e6f9e"/>
+<text x="212.0" y="347" font-size="9.5" fill="#777" text-anchor="middle">3.0</text>
+<text x="248.0" y="315" font-size="9.5" fill="#2e6f9e" text-anchor="middle" font-weight="bold">4.2</text>
+<text x="418" y="331" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+1.2ms</text>
+<text x="26" y="414" font-size="10.5" fill="#555">Hop cost +0.5 to 1.6 ms; looms larger when clients reuse connections</text>
+<text x="686.0" y="84" font-size="12.5" fill="#111" text-anchor="middle" font-weight="bold">Q2. Turning on guardrail argument checks?</text>
+<text x="686.0" y="100" font-size="10.5" fill="#666" text-anchor="middle">adds a per-call gRPC round trip to the check server</text>
+<circle cx="526" cy="122" r="5" fill="#8a8f98"/>
+<text x="536" y="126" font-size="10.5" fill="#333">no check</text>
+<circle cx="696" cy="122" r="5" fill="#6a4b9e"/>
+<text x="706" y="126" font-size="10.5" fill="#333">check on (+gRPC round trip)</text>
+<line x1="582.0" y1="144" x2="582.0" y2="364" stroke="#eee"/>
+<text x="582.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">0</text>
+<line x1="642.0" y1="144" x2="642.0" y2="364" stroke="#eee"/>
+<text x="642.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">2</text>
+<line x1="702.0" y1="144" x2="702.0" y2="364" stroke="#eee"/>
+<text x="702.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">4</text>
+<line x1="762.0" y1="144" x2="762.0" y2="364" stroke="#eee"/>
+<text x="762.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">6</text>
+<line x1="822.0" y1="144" x2="822.0" y2="364" stroke="#eee"/>
+<text x="822.0" y="378" font-size="9.5" fill="#999" text-anchor="middle">8</text>
+<text x="702.0" y="394" font-size="10" fill="#777" text-anchor="middle">p50 (ms)</text>
+<text x="486" y="154" font-size="11" fill="#333">new conn per call</text>
+<text x="486" y="168" font-size="10" fill="#888">100 rps</text>
+<line x1="780.0" y1="152" x2="801.0" y2="152" stroke="#6a4b9e" stroke-width="4" opacity="0.45"/>
+<circle cx="780.0" cy="152" r="5.5" fill="#8a8f98"/>
+<circle cx="801.0" cy="152" r="5.5" fill="#6a4b9e"/>
+<text x="780.0" y="173" font-size="9.5" fill="#777" text-anchor="middle">6.6</text>
+<text x="801.0" y="141" font-size="9.5" fill="#6a4b9e" text-anchor="middle" font-weight="bold">7.3</text>
+<text x="878" y="157" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+0.7ms</text>
+<text x="486" y="212" font-size="11" fill="#333">new conn per call</text>
+<text x="486" y="226" font-size="10" fill="#888">200 rps</text>
+<line x1="762.0" y1="210" x2="777.0" y2="210" stroke="#6a4b9e" stroke-width="4" opacity="0.45"/>
+<circle cx="762.0" cy="210" r="5.5" fill="#8a8f98"/>
+<circle cx="777.0" cy="210" r="5.5" fill="#6a4b9e"/>
+<text x="762.0" y="231" font-size="9.5" fill="#777" text-anchor="middle">6.0</text>
+<text x="777.0" y="199" font-size="9.5" fill="#6a4b9e" text-anchor="middle" font-weight="bold">6.5</text>
+<text x="878" y="215" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+0.5ms</text>
+<text x="486" y="270" font-size="11" fill="#333">connection reuse</text>
+<text x="486" y="284" font-size="10" fill="#888">100 rps</text>
+<line x1="732.0" y1="268" x2="750.0" y2="268" stroke="#6a4b9e" stroke-width="4" opacity="0.45"/>
+<circle cx="732.0" cy="268" r="5.5" fill="#8a8f98"/>
+<circle cx="750.0" cy="268" r="5.5" fill="#6a4b9e"/>
+<text x="732.0" y="289" font-size="9.5" fill="#777" text-anchor="middle">5.0</text>
+<text x="750.0" y="257" font-size="9.5" fill="#6a4b9e" text-anchor="middle" font-weight="bold">5.6</text>
+<text x="878" y="273" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+0.6ms</text>
+<text x="486" y="328" font-size="11" fill="#333">connection reuse</text>
+<text x="486" y="342" font-size="10" fill="#888">200 rps</text>
+<line x1="699.0" y1="326" x2="711.0" y2="326" stroke="#6a4b9e" stroke-width="4" opacity="0.45"/>
+<circle cx="699.0" cy="326" r="5.5" fill="#8a8f98"/>
+<circle cx="711.0" cy="326" r="5.5" fill="#6a4b9e"/>
+<text x="699.0" y="347" font-size="9.5" fill="#777" text-anchor="middle">3.9</text>
+<text x="711.0" y="315" font-size="9.5" fill="#6a4b9e" text-anchor="middle" font-weight="bold">4.3</text>
+<text x="878" y="331" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">+0.4ms</text>
+<text x="486" y="414" font-size="10.5" fill="#555">Argument checking costs about 0.5 ms per call, roughly constant across the measured conditions</text>
+</svg>

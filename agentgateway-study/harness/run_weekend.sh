@@ -21,6 +21,13 @@ GRDIR="$STUDY/k8s/guardrail"
 LOADGEN="$MCPSTUDY/harness/loadgen.py"
 PY=/tmp/mcpvenv/bin/python
 COOLDOWN=180
+# 전제 검사: /tmp venv는 재부팅으로 사라진다. 없으면 셀이 조용히 빈 값이
+# 된다(grr-0825 사고). 이 스크립트를 템플릿으로 재사용할 때도 유지할 것.
+"$PY" -c "import httpx" 2>/dev/null || {
+  echo "[중단] $PY 에 httpx 없음(loadgen 의존성). venv 재구성:"
+  echo "  /opt/homebrew/bin/python3.13 -m venv /tmp/mcpvenv && /tmp/mcpvenv/bin/pip install httpx"
+  exit 1
+}
 mkdir -p "$STUDY/$BASE"
 OUT="$STUDY/$BASE"
 log() { echo "[$(date '+%m-%d %H:%M')] $*"; }

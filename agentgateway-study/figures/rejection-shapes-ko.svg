@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 580" font-family="Helvetica, Arial, sans-serif">
+<rect width="760" height="580" fill="white"/>
+<text x="380.0" y="30" font-size="14" fill="#111" text-anchor="middle" font-weight="bold">요청이 거부될 때 클라이언트가 보는 세 가지 형태</text>
+<text x="380.0" y="48" font-size="11" fill="#777" text-anchor="middle">거부한 층에 따라 응답 모양이 갈린다. 모양이 곧 진단 단서다.</text>
+<rect x="40" y="120" width="110" height="44" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="95.0" y="146.0" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">클라이언트</text>
+<rect x="280" y="106" width="170" height="72" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="365.0" y="138.0" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">게이트웨이</text>
+<text x="365.0" y="156.0" font-size="9.5" fill="#666" text-anchor="middle">인가 정책 (mcpAuthorization)</text>
+<rect x="560" y="120" width="150" height="44" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="635.0" y="146.0" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">MCP 서버</text>
+<line x1="150" y1="142" x2="278" y2="142" stroke="#555" stroke-width="1.8"/>
+<line x1="278" y1="142" x2="270.3" y2="146.6" stroke="#555" stroke-width="1.8"/>
+<line x1="278" y1="142" x2="270.3" y2="137.4" stroke="#555" stroke-width="1.8"/>
+<line x1="450" y1="142" x2="558" y2="142" stroke="#555" stroke-width="1.8"/>
+<line x1="558" y1="142" x2="550.3" y2="146.6" stroke="#555" stroke-width="1.8"/>
+<line x1="558" y1="142" x2="550.3" y2="137.4" stroke="#555" stroke-width="1.8"/>
+<rect x="280" y="252" width="170" height="44" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="365.0" y="278.0" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">guardrail 검사 서버</text>
+<line x1="365" y1="178" x2="365" y2="250" stroke="#555" stroke-width="1.8" stroke-dasharray="4,3"/>
+<text x="384" y="218" font-size="9.5" fill="#666">gRPC 왕복</text>
+<line x1="352" y1="228" x2="378" y2="200" stroke="#8a6d1f" stroke-width="2.5"/>
+<circle cx="292" cy="118" r="11" fill="#c1442e"/>
+<text x="292" y="122" font-size="12" fill="white" text-anchor="middle" font-weight="bold">1</text>
+<circle cx="292" cy="252" r="11" fill="#6a4b9e"/>
+<text x="292" y="256" font-size="12" fill="white" text-anchor="middle" font-weight="bold">2</text>
+<circle cx="365" cy="214" r="11" fill="#8a6d1f"/>
+<text x="365" y="218" font-size="12" fill="white" text-anchor="middle" font-weight="bold">3</text>
+<text x="380.0" y="326" font-size="10.5" fill="#555" text-anchor="middle">세 형태 모두 요청이 MCP 서버에 닿기 전에 멈춘다.</text>
+<rect x="24" y="348" width="224" height="200" rx="8" fill="none" stroke="#c1442e" stroke-width="2"/>
+<rect x="24" y="348" width="224" height="38" rx="8" fill="#c1442e"/>
+<rect x="24" y="372" width="224" height="14" fill="#c1442e"/>
+<text x="136.0" y="372" font-size="12.5" fill="white" text-anchor="middle" font-weight="bold">1. mcpAuthorization 거부</text>
+<text x="136.0" y="418" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">HTTP 400</text>
+<text x="136.0" y="438" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">-32602 "Unknown tool"</text>
+<text x="136.0" y="484" font-size="11" fill="#555" text-anchor="middle">도구 부재와 구분되지 않는 응답.</text>
+<text x="136.0" y="501" font-size="11" fill="#555" text-anchor="middle">tools/list에서도 숨겨진다</text>
+<rect x="268" y="348" width="224" height="200" rx="8" fill="none" stroke="#6a4b9e" stroke-width="2"/>
+<rect x="268" y="348" width="224" height="38" rx="8" fill="#6a4b9e"/>
+<rect x="268" y="372" width="224" height="14" fill="#6a4b9e"/>
+<text x="380.0" y="372" font-size="12.5" fill="white" text-anchor="middle" font-weight="bold">2. mcpGuardrails 거부</text>
+<text x="380.0" y="418" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">HTTP 200</text>
+<text x="380.0" y="438" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">-32001 + 서버가 정한 사유</text>
+<text x="380.0" y="484" font-size="11" fill="#555" text-anchor="middle">사유가 그대로 나간다</text>
+<text x="380.0" y="501" font-size="11" fill="#555" text-anchor="middle">("a == 1일 때만 허용")</text>
+<rect x="512" y="348" width="224" height="200" rx="8" fill="none" stroke="#8a6d1f" stroke-width="2"/>
+<rect x="512" y="348" width="224" height="38" rx="8" fill="#8a6d1f"/>
+<rect x="512" y="372" width="224" height="14" fill="#8a6d1f"/>
+<text x="624.0" y="372" font-size="12.5" fill="white" text-anchor="middle" font-weight="bold">3. FailClosed (서버 다운)</text>
+<text x="624.0" y="418" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">HTTP 200</text>
+<text x="624.0" y="438" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">-32603 내부 오류 문구</text>
+<text x="624.0" y="484" font-size="11" fill="#555" text-anchor="middle">guardrail 죽으면 전부 차단.</text>
+<text x="624.0" y="501" font-size="11" fill="#555" text-anchor="middle">내부 상태가 노출된다</text>
+</svg>

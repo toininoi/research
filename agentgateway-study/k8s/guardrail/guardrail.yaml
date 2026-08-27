@@ -1,0 +1,44 @@
+# 축 3 guardrail 정책 서버 배포. 코드는 ConfigMap(guardrail-code)으로 마운트하고
+# 이미지는 python:3.12-slim에 기동 시 grpcio만 설치한다(이미지 빌드 없이 재현).
+# ConfigMap은 스파이크 스크립트가 --from-file로 만든다(server.py + pb2 2종).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guardrail
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: guardrail }
+  template:
+    metadata:
+      labels: { app: guardrail }
+    spec:
+      containers:
+        - name: server
+          image: docker.io/library/python:3.12-slim
+          command: ["sh", "-c"]
+          args:
+            - pip install --quiet --no-cache-dir grpcio protobuf && exec python /app/server.py
+          workingDir: /app
+          ports:
+            - containerPort: 50051
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+          volumeMounts:
+            - { name: code, mountPath: /app }
+      volumes:
+        - name: code
+          configMap: { name: guardrail-code }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: guardrail
+  namespace: mcp-pilot
+spec:
+  selector: { app: guardrail }
+  ports:
+    - port: 50051
+      targetPort: 50051
